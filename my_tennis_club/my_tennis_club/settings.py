@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-$h3j(rec2sgm10&ov%5*o56t%19*9(-h#r^x@rv&agn!4qzecn"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -74,14 +75,39 @@ WSGI_APPLICATION = "my_tennis_club.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
+# By default, use SQLite for local development.
+# Set USE_REMOTE_DB=1 in the environment to use the remote PostgreSQL RDS database.
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DB_NAME", "postgres"),
+        "USER": os.environ.get("DB_USER", "masteruser"),
+        "PASSWORD": os.environ.get("DB_PASSWORD", "Marungamise"),
+        "HOST": os.environ.get("DB_HOST", "w3-django-project.cg1se8i2qnfw.us-east-1.rds.amazonaws.com"),
+        "PORT": os.environ.get("DB_PORT", "5432"),
     }
 }
 
+'''
+if os.environ.get("USE_REMOTE_DB") == "1":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("DB_NAME", "postgres"),
+            "USER": os.environ.get("DB_USER", "masteruser"),
+            "PASSWORD": os.environ.get("DB_PASSWORD", "Marungamise"),
+            "HOST": os.environ.get("DB_HOST", "w3-django-project.cg1se8i2qnfw.us-east-1.rds.amazonaws.com"),
+            "PORT": os.environ.get("DB_PORT", "5432"),
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -132,3 +158,8 @@ CSRF_TRUSTED_ORIGINS = [
 STATIC_ROOT = BASE_DIR / 'productionfiles'
 
 STATIC_URL = 'static/'
+
+#Add this in your settings.py file:
+STATICFILES_DIRS = [
+    BASE_DIR / 'mystaticfiles'
+]

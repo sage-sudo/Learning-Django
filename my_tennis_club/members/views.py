@@ -24,13 +24,14 @@ def details(request, id):
     context = {
         'mymember': mymember,
     }   
+
     return HttpResponse(template.render(context, request))
 
 
 def testing(request):
-  mymembers = Member.objects.all().values()
-  template = loader.get_template('testing.html')
-  context = {
-    'mymembers': mymembers,
-  }
-  return HttpResponse(template.render(context, request))
+    mymembers = Member.objects.all().values()
+    template = loader.get_template('testing.html')
+    context = {
+        'mymembers': mymembers,
+    }
+    return HttpResponse(template.render(context, request))

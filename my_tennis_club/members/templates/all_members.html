@@ -6,15 +6,17 @@
 
 
 {% block content %}
+  <div class="mycard">
+    <h1>Members</h1>
+    
+    <ul>
+      {% for x in mymembers %}
+      <li onclick="window.location = '/details/{{ x.id }}'">{{ x.firstname }} {{ x.lastname }}</li>
+      {% endfor %}
+    </ul><br>
 
-  <p><a href="/">HOME</a></p>
+    <li onclick="window.location = '/'">Back to Home</li>
+    <!--<a href="/">Back to Home</a>-->
 
-  <h1>Members</h1>
-  
-  <ul>
-    {% for x in mymembers %}
-      <li><a href="details/{{ x.id }}">{{ x.firstname }} {{ x.lastname }}</a></li>
-    {% endfor %}
-  </ul><br>
-  <div><a href="/">Back to Home</a></div>
+  </div>
 {% endblock %}
