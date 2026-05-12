@@ -75,33 +75,39 @@ WSGI_APPLICATION = "my_tennis_club.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.oxtncvjocwnhgzoxodvp',
-        'PASSWORD': 'M@rung@m!s3',
-        'HOST': 'aws-0-eu-west-1.pooler.supabase.com',
-        'PORT': '6543',
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
-    }
-}
+IPV_4 = True
 
-'''
-if os.environ.get("USE_REMOTE_DB") == "1":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("DB_NAME", "postgres"),
-            "USER": os.environ.get("DB_USER", "masteruser"),
-            "PASSWORD": os.environ.get("DB_PASSWORD", "Marungamise"),
-            "HOST": os.environ.get("DB_HOST", "w3-django-project.cg1se8i2qnfw.us-east-1.rds.amazonaws.com"),
-            "PORT": os.environ.get("DB_PORT", "5432"),
+
+if IPV_4:
+        DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres.oxtncvjocwnhgzoxodvp',
+            'PASSWORD': 'M@rung@m!s3',
+            'HOST': 'aws-0-eu-west-1.pooler.supabase.com',
+            'PORT': '5432',
+            'OPTIONS': {
+                'sslmode': 'require',
+            },
         }
     }
 else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres.oxtncvjocwnhgzoxodvp',
+            'PASSWORD': 'M@rung@m!s3',
+            'HOST': 'aws-0-eu-west-1.pooler.supabase.com',
+            'PORT': '6543',
+            'OPTIONS': {
+                'sslmode': 'require',
+            },
+        }
+    }
+
+'''
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
