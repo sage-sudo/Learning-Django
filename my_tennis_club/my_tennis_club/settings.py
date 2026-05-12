@@ -16,7 +16,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+import streamlit as st
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
@@ -75,39 +75,33 @@ WSGI_APPLICATION = "my_tennis_club.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-# By default, use SQLite for local development.
-# Set USE_REMOTE_DB=1 in the environment to use the remote PostgreSQL RDS database.
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "postgres"),
-        "USER": os.environ.get("DB_USER", "masteruser"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "Marungamise"),
-        "HOST": os.environ.get("DB_HOST", "w3-django-project.cg1se8i2qnfw.us-east-1.rds.amazonaws.com"),
-        "PORT": os.environ.get("DB_PORT", "5432"),
-    }
-}
+# By default, use local PostgreSQL container for development.
+# Set SUPABASE_ENABLED=1 in environment to use Supabase (IPv6 connectivity required).
 
-'''
-if os.environ.get("USE_REMOTE_DB") == "1":
+if os.environ.get("SUPABASE_ENABLED") == "1":
+    # Use Supabase for production/remote
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("DB_NAME", "postgres"),
-            "USER": os.environ.get("DB_USER", "masteruser"),
-            "PASSWORD": os.environ.get("DB_PASSWORD", "Marungamise"),
-            "HOST": os.environ.get("DB_HOST", "w3-django-project.cg1se8i2qnfw.us-east-1.rds.amazonaws.com"),
-            "PORT": os.environ.get("DB_PORT", "5432"),
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': st.secrets.get("SUPABASE_DB_NAME"),
+            'USER': st.secrets.get("SUPABASE_DB_USER"),
+            'PASSWORD': st.secrets.get("SUPABASE_DB_PASSWORD"),
+            'HOST': st.secrets.get("SUPABASE_DB_HOST"),
+            'PORT': st.secrets.get("SUPABASE_DB_PORT"),
         }
     }
 else:
+    # Use local PostgreSQL container for development (default)
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('LOCAL_DB_NAME', 'tennis_club'),
+            'USER': os.environ.get('LOCAL_DB_USER', 'postgres'),
+            'PASSWORD': os.environ.get('LOCAL_DB_PASSWORD', 'postgres'),
+            'HOST': os.environ.get('LOCAL_DB_HOST', 'localhost'),
+            'PORT': os.environ.get('LOCAL_DB_PORT', '5432'),
         }
     }
-'''
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
